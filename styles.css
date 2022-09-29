@@ -1,0 +1,23 @@
+* {
+    box-sizing: border-box;
+}
+
+#container {
+    height: 200px;
+    width: 100px;
+    margin: 0 auto 3vh;
+}
+
+.buttons {
+    text-align: center;
+}
+
+.btnRow {
+    display: flex;
+    justify-content: space-between;
+    border: solid 1px;
+}
+
+.buttons {
+    text-align: center;
+}
