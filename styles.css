@@ -3,21 +3,64 @@
 }
 
 #container {
-    height: 200px;
-    width: 100px;
-    margin: 0 auto 3vh;
-}
-
-.buttons {
-    text-align: center;
-}
-
-.btnRow {
-    display: flex;
-    justify-content: space-between;
+    margin: 7vh auto 3vh;
     border: solid 1px;
+    border-radius: 2%;
+    height: 350px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: rgb(174, 174, 174);
 }
 
-.buttons {
+#display {
+    display: flex;
+    border: solid 1px;
+    border-radius: 4%;
+    width: 212px;
+    height: 70px;
+    align-self: center;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin: 10px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    background-color: #fff;
+}
+
+button {
     text-align: center;
+    height: 50px;
+    width: 50px;
+    border: solid 1px;
+    border-radius: 5%;
+    background-color: #fff;
+}
+
+button:hover {
+    background-image: linear-gradient(rgb(0 0 0/10%) 0 0);
+  }
+
+#keys {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 5px;
+    padding-bottom: 10px;
+}
+
+#clear, #delete {
+    height: 35px;
+    width: 104px;
+}
+
+#clear {
+    background-color: rgb(254, 150, 150);
+}
+
+#delete {
+    background-color: rgb(123, 162, 248);
 }
