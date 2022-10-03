@@ -1,3 +1,48 @@
+const display = document.querySelector('#display');
+const displayContainer = document.querySelector('#displayContainer');
+
+// Globals
+let currInput = 0;
+let inputArr = [];
+let x;
+let y;
+let operation = "";
+let output;
+// Initial calculator display
+displayUpdate(currInput);
+
+// button click events
+const numberKeys = document.querySelectorAll('.number');
+numberKeys.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        getNumber(e);
+    });
+});
+
+const operatorKeys = document.querySelectorAll('.operator');
+operatorKeys.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        console.log(`op: ${operation}`);
+        console.log(`X = ${x}`);
+        console.log(`Y = ${y}`);
+        if (operation !== "") {
+            evaluate();
+        }
+        getOperator(e);
+    });
+});
+
+const equalsKey = document.querySelector('#equal');
+equalsKey.addEventListener('click', () => {
+    evaluate();
+    operation = "";
+    console.log(`X = ${x}`);
+    console.log(`Y = ${y}`);
+    console.log(`op: ${operation}`);
+    console.log(`output: ${output}`);
+});
+
+// functions
 function add(a, b) {
     return a + b;
 }
@@ -27,67 +72,33 @@ function operate(operator, x, y) {
     }
 }
 
-const display = document.querySelector('#display');
-const displayContainer = document.querySelector('#displayContainer');
-
-// Globals
-let currInput = 0;
-let inputArr = [];
-let x;
-let y;
-let operation;
-let output;
-// Initial calculator display
-displayUpdate(currInput);
-
-const numberKeys = document.querySelectorAll('.number');
-numberKeys.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        inputNumber(e);
-    });
-});
-function inputNumber(e) {
+function getNumber(e) {
     inputArr.push(e.target.textContent);
-    currInput = getNumber(inputArr);
+    currInput = toNumber(inputArr);
     displayUpdate(currInput);
 }
 
-const operatorKeys = document.querySelectorAll('.operator');
-operatorKeys.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        if (operation !== "" && operation !== undefined) {
-            y = currInput;
-            output = operate(operation, x, y);
-            displayUpdate(output);
-            currInput = output;
-        }
-        inputOp(e);
-    });
-});
-function inputOp(e) {
+function toNumber(arr) {
+    return parseInt(arr.join(""));
+}
+
+function getOperator(e) {
     operation = e.target.textContent;
     x = currInput;
     inputArr.splice(0, inputArr.length);
 }
 
-const equalsKey = document.querySelector('#equal');
-equalsKey.addEventListener('click', () => {
-    evaluate();
-    operation = "";
-});
 function evaluate() {
     y = currInput;
-    output = operate(operation, x, y);
+    if (operation !== "") {
+        output = operate(operation, x, y);
+    }
     displayUpdate(output);
     currInput = output;
 }
 
 function displayUpdate(output) {
     display.textContent = output;
-}
-
-function getNumber(arr) {
-    return parseInt(arr.join(""));
 }
 
 /*
