@@ -2,11 +2,20 @@
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: "Cooper Hewitt";
+    src: url("font/CooperHewitt-Thin.otf");
+}
+
+body {
+    font-family: 'Cooper Hewitt';
+}
+
 #container {
     margin: 7vh auto 3vh;
     border: solid 1px;
     border-radius: 25px;
-    height: 400px;
+    height: 440px;
     width: 240px;
     display: flex;
     flex-direction: column;
@@ -14,13 +23,16 @@
     background-color: #1C1C1C;
 }
 
-#display {
+#display, #displayContainer {
     display: flex;
-    width: 212px;
-    height: 70px;
+    width: 213px;
+    height: 110px;
     align-self: center;
     justify-content: flex-end;
     align-items: flex-end;
+}
+
+#display {
     margin-top: 10px;
     padding-top: 5px;;
     padding-right: 13px;
@@ -41,7 +53,7 @@ button {
 
 button:hover {
     background-image: linear-gradient(rgb(0 0 0/10%) 0 0);
-  }
+}
 
 #keys {
     align-self: center;
