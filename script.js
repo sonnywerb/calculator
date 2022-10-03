@@ -29,54 +29,58 @@ function operate(operator, x, y) {
 
 const display = document.querySelector('#display');
 const displayContainer = document.querySelector('#displayContainer');
-display.textContent = 0;
 
-// Index 0: x, 1: operator, 2: y
-// let inputArr = [];
-
-let x = 0;
-let y = 0;
-let currInput;
-let arr = [];
-const numberKeys = document.querySelectorAll('.number');
-function inputNumber() {
-    numberKeys.forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            arr.push(e.target.textContent);
-            console.log(arr);
-            currInput = getNumber(arr);
-            displayUpdate(currInput);
-            console.log(`X = ${x}`);
-            console.log(`Y = ${y}`);
-        });
-    });
-}
-inputNumber();
-
+// Globals
+let currInput = 0;
+let inputArr = [];
+let x;
+let y;
 let operation;
+let output;
+// Initial calculator display
+displayUpdate(currInput);
+
+const numberKeys = document.querySelectorAll('.number');
+numberKeys.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        inputNumber(e);
+    });
+});
+function inputNumber(e) {
+    inputArr.push(e.target.textContent);
+    currInput = getNumber(inputArr);
+    displayUpdate(currInput);
+}
+
 const operatorKeys = document.querySelectorAll('.operator');
 operatorKeys.forEach((btn) => {
     btn.addEventListener('click', (e) => {
-        operation = e.target.textContent;
-        x = currInput;
-        arr.splice(0, arr.length);
-        console.log(`op: ${operation}`);
-        console.log(`X = ${x}`);
-        console.log(`Y = ${y}`);
+        if (operation !== "" && operation !== undefined) {
+            y = currInput;
+            output = operate(operation, x, y);
+            displayUpdate(output);
+            currInput = output;
+        }
+        inputOp(e);
     });
 });
+function inputOp(e) {
+    operation = e.target.textContent;
+    x = currInput;
+    inputArr.splice(0, inputArr.length);
+}
 
-let output;
 const equalsKey = document.querySelector('#equal');
-equalsKey.addEventListener('click', (e) => {
+equalsKey.addEventListener('click', () => {
+    evaluate();
+    operation = "";
+});
+function evaluate() {
     y = currInput;
     output = operate(operation, x, y);
     displayUpdate(output);
     currInput = output;
-    console.log(`output: ${output}`);
-    console.log(`X = ${x}`);
-    console.log(`Y = ${y}`);
-});
+}
 
 function displayUpdate(output) {
     display.textContent = output;
