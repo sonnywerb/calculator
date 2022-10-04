@@ -34,15 +34,60 @@ operatorKeys.forEach((btn) => {
 
 const equalsKey = document.querySelector('#equal');
 equalsKey.addEventListener('click', () => {
-    evaluate();
-    operation = "";
-    console.log(`X = ${x}`);
-    console.log(`Y = ${y}`);
-    console.log(`op: ${operation}`);
-    console.log(`output: ${output}`);
+    if (operation !== "") {
+        evaluate();
+    }
+    return;
+
+    // console.log(`X = ${x}`);
+    // console.log(`Y = ${y}`);
+    // console.log(`op: ${operation}`);
+    // console.log(`output: ${output}`);
 });
 
 // functions
+function getNumber(e) {
+    inputArr.push(e.target.textContent);
+    currInput = toNumber(inputArr);
+    displayUpdate(currInput);
+}
+
+function toNumber(arr) {
+    return parseInt(arr.join(""));
+}
+
+function getOperator(e) {
+    operation = e.target.textContent;
+    x = currInput;
+    inputArr.splice(0, inputArr.length);
+}
+
+function evaluate() {
+    y = currInput;
+    output = operate(operation, x, y);
+    displayUpdate(output);
+    currInput = output;
+    operation = "";
+}
+
+function displayUpdate(output) {
+    display.textContent = output;
+}
+
+/*
+Calcuator steps
+1. enter first number
+2. select operator
+3. enter second number
+4. press equals
+
+further functionalities to add
+- pressing an operator again would perform same functionality as =
+- make numbers shrink to fit on screen
+
+*/
+
+// arithmetic functions
 function add(a, b) {
     return a + b;
 }
@@ -71,45 +116,3 @@ function operate(operator, x, y) {
            return divide(x, y);
     }
 }
-
-function getNumber(e) {
-    inputArr.push(e.target.textContent);
-    currInput = toNumber(inputArr);
-    displayUpdate(currInput);
-}
-
-function toNumber(arr) {
-    return parseInt(arr.join(""));
-}
-
-function getOperator(e) {
-    operation = e.target.textContent;
-    x = currInput;
-    inputArr.splice(0, inputArr.length);
-}
-
-function evaluate() {
-    y = currInput;
-    if (operation !== "") {
-        output = operate(operation, x, y);
-    }
-    displayUpdate(output);
-    currInput = output;
-}
-
-function displayUpdate(output) {
-    display.textContent = output;
-}
-
-/*
-Calcuator steps
-1. enter first number
-2. select operator
-3. enter second number
-4. press equals
-
-further functionalities to add
-- pressing an operator again would perform same functionality as =
-- make numbers shrink to fit on screen
-
-*/
