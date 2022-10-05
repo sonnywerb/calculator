@@ -33,9 +33,15 @@ getLastKeyPressed();
 // button click events
 numberBtn.forEach((btn) => {
     btn.addEventListener('click', (e) => {
-        appendNumber(e.target.textContent);
+        append(e.target.textContent);
         updateDisplay();
     });
+    // keyboard support
+    btn.addEventListener('keydown', (e) => {
+        append(e.target.key);
+        console.log(e.target.key);
+        updateDisplay();
+    })
 });
 
 operatorBtn.forEach((btn) => {
@@ -67,6 +73,7 @@ operatorBtn.forEach((btn) => {
             x = parseFloat(output);
             operator = currKeyPressed;
             output = "";
+            console.log('a', operator);
         }
     });
 });
@@ -75,16 +82,16 @@ equals.addEventListener('click', () => {
     // if there's no second value inputted after operator, the = key
     // assumes the second value is the same as the first
     if (isOperator(lastKeyPressed)) {
+        console.log('b', x, y);
         y = x;
         operator = lastKeyPressed;
         output = operate(operator, x, y);
         updateDisplay();
         lastOperator = operator;
         operator = undefined;
-        console.log(x, y, output);
-    }
+        console.log('b', x, y, output);
     // if no values have been inputted yet, do nothing
-    else if (x === undefined) { 
+    } else if (x === undefined) { 
         return;
     // perform last operation and return value
     } else if (lastKeyPressed === currKeyPressed) {
@@ -93,13 +100,24 @@ equals.addEventListener('click', () => {
         updateDisplay();
     // evaluate expression
     } else {
+        if (operator === undefined) {
+            x = parseFloat(output);
+            output = operate(lastOperator, x, y);
+            console.log('d', lastOperator, x, y);
+            updateDisplay();
+            return;
+        }
         y = parseFloat(output);
-        output = operate(operator, x, y);
-        updateDisplay();
         lastOperator = operator;
+        output = operate(operator, x, y);
+        console.log('e', operator, x, y, output);
+        updateDisplay();
         operator = undefined;
     }
 });
+
+// last=digit current='=' &&  
+
 
 clear.addEventListener('click', () => {
     output = 0;
@@ -113,6 +131,15 @@ clear.addEventListener('click', () => {
     updateDisplay();
 });
 
+decimal.addEventListener('click', () => {
+    if (output.toString().includes(".")) {
+        return;
+    } else {
+        append('.');
+        updateDisplay();
+    }
+});
+
 plusMinus.addEventListener('click', () => {
     output *= -1;
     updateDisplay();
@@ -123,13 +150,17 @@ percent.addEventListener('click', () => {
     updateDisplay();
 })
 
-
 // helper functions
-function appendNumber(n) {
-    if (output == 0) {
-        output = n;
+function append(n) {
+    if (output === 0) {
+        if (n === '.') {
+            output += n;
+        } else {
+            // shows only 1 zero on screen when output is 0 and user presses 0
+            output = parseInt(output) + parseInt(n);
+        }
     } else {
-        output = output + n;
+        output += n;
     }
 }
 
@@ -175,6 +206,9 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
+    if (b === 0) {
+        return 'Error';
+    }
     return a / b;
 }
 
