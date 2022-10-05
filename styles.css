@@ -49,6 +49,7 @@ button {
     border-radius: 50%;
     color: #fff;
     border-color: transparent;
+    font-size: larger;
 }
 
 button:hover {
@@ -64,6 +65,11 @@ button:hover {
     margin: 5px;
     margin-top: 0px;
     padding-bottom: 10px;
+}
+
+.operator:focus {
+    color: #FF9500;
+    background-color: #fff;
 }
 
 #zero {
