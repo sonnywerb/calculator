@@ -2,7 +2,6 @@
 let output = 0;
 let x;
 let y;
-let z;
 let lastOperator;
 let operator;
 let currKeyPressed;
@@ -61,13 +60,23 @@ operatorBtn.forEach((btn) => {
 });
 
 equals.addEventListener('click', () => {
-    // if theres an operator, but no second value;
-    if (isOperator(lastKeyPressed)) return;
+    // if there's no second value inputted after operator, the = key
+    // assumes the second value is the same as the first
+    if (isOperator(lastKeyPressed)) {
+        y = x;
+        operator = lastKeyPressed;
+        output = operate(operator, x, y);
+        updateDisplay();
+        lastOperator = operator;
+        operator = undefined;
+        console.log(x, y, output);
+    }
     // if no values have been inputted yet, do nothing
-    if (x === undefined) { 
+    else if (x === undefined) { 
         return;
     // perform last operation and return value
-    } else if (lastKeyPressed == currKeyPressed) {
+    } else if (lastKeyPressed === currKeyPressed) {
+        if (y === undefined) return;
         output = operate(lastOperator, output, y);
         updateDisplay();
     // evaluate expression
