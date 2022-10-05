@@ -3,6 +3,7 @@ let output = 0;
 let x;
 let y;
 let z;
+let lastOperator;
 let operator;
 let currKeyPressed;
 let lastKeyPressed;
@@ -12,22 +13,10 @@ const displayContainer = document.querySelector('#displayContainer');
 const numberBtn = document.querySelectorAll('.number');
 const operatorBtn = document.querySelectorAll('.operator');
 const equalsBtn = document.querySelector('#equal');
+const decimalBtn = document.querySelector('#decimal');
 const buttons = document.querySelectorAll('button');
 
-function getLastKeyPressed() {
-    buttons.forEach((btn) => {
-        btn.addEventListener('click', (e) => {
-            lastKeyPressed = currKeyPressed;
-            currKeyPressed = e.target.textContent;
-            console.log(`Last: ${lastKeyPressed} \nCurr: ${currKeyPressed}`);
-        });
-    });
-}
 getLastKeyPressed();
-
-function updateDisplay() {
-    display.textContent = output;
-}
 
 // button click events
 numberBtn.forEach((btn) => {
@@ -36,28 +25,6 @@ numberBtn.forEach((btn) => {
         updateDisplay();
     });
 });
-
-function appendNumber(n) {
-    if (output == 0) {
-        output = n;
-    } else {
-        output = output + n;
-    }
-}
-
-function isOperator(a) {
-    switch(a) {
-        case '+':
-            return true;
-        case '-':
-            return true;
-        case '*':
-            return true;
-        case '/':
-            return true;
-    }
-    return false;
-}
 
 operatorBtn.forEach((btn) => {
     btn.addEventListener('click', (e) => {
@@ -93,20 +60,62 @@ operatorBtn.forEach((btn) => {
 });
 
 equalsBtn.addEventListener('click', () => {
-    if (lastKeyPressed == currKeyPressed) return;
-    if (isOperator(lastKeyPressed)) return;
-
-    y = parseInt(output);
-    output = operate(operator, x, y);
-    updateDisplay();
-
-    // reset x and y
-    x = undefined;
-    y = undefined;
-    operator = undefined;
-
-    console.log(`Clicked Equals Log \nx: ${x} \ny: ${y} \noperator: ${operator} \noutput: ${output}`)
+    // if no values have been inputted yet or user has only 
+    // clicked operator then do nothing
+    if (x === undefined || isOperator(lastKeyPressed)) { 
+        return;
+    // perform last operation and return value
+    } else if (lastKeyPressed == currKeyPressed) {
+        output = operate(lastOperator, output, y);
+        updateDisplay();
+    // evaluate expression
+    } else {
+        y = parseInt(output);
+        output = operate(operator, x, y);
+        updateDisplay();
+        lastOperator = operator;
+        operator = undefined;
+    }
 });
+
+
+
+// helper functions
+function appendNumber(n) {
+    if (output == 0) {
+        output = n;
+    } else {
+        output = output + n;
+    }
+}
+
+function getLastKeyPressed() {
+    buttons.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            lastKeyPressed = currKeyPressed;
+            currKeyPressed = e.target.textContent;
+            console.log(`Last: ${lastKeyPressed} \nCurr: ${currKeyPressed}`);
+        });
+    });
+}
+
+function updateDisplay() {
+    display.textContent = output;
+}
+
+function isOperator(a) {
+    switch(a) {
+        case '+':
+            return true;
+        case '-':
+            return true;
+        case '*':
+            return true;
+        case '/':
+            return true;
+    }
+    return false;
+}
 
 // arithmetic functions
 function add(a, b) {
