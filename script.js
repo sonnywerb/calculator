@@ -39,7 +39,7 @@ numberBtn.forEach((btn) => {
     // keyboard support
     btn.addEventListener('keydown', (e) => {
         append(e.target.key);
-        console.log(e.target.key);
+        // console.log(e.target.key);
         updateDisplay();
     })
 });
@@ -73,7 +73,6 @@ operatorBtn.forEach((btn) => {
             x = parseFloat(output);
             operator = currKeyPressed;
             output = "";
-            console.log('a', operator);
         }
     });
 });
@@ -82,14 +81,12 @@ equals.addEventListener('click', () => {
     // if there's no second value inputted after operator, the = key
     // assumes the second value is the same as the first
     if (isOperator(lastKeyPressed)) {
-        console.log('b', x, y);
         y = x;
         operator = lastKeyPressed;
         output = operate(operator, x, y);
         updateDisplay();
         lastOperator = operator;
         operator = undefined;
-        console.log('b', x, y, output);
     // if no values have been inputted yet, do nothing
     } else if (x === undefined) { 
         return;
@@ -103,14 +100,12 @@ equals.addEventListener('click', () => {
         if (operator === undefined) {
             x = parseFloat(output);
             output = operate(lastOperator, x, y);
-            console.log('d', lastOperator, x, y);
             updateDisplay();
             return;
         }
         y = parseFloat(output);
         lastOperator = operator;
         output = operate(operator, x, y);
-        console.log('e', operator, x, y, output);
         updateDisplay();
         operator = undefined;
     }
@@ -169,7 +164,7 @@ function getLastKeyPressed() {
         btn.addEventListener('click', (e) => {
             lastKeyPressed = currKeyPressed;
             currKeyPressed = e.target.textContent;
-            console.log(`Last: ${lastKeyPressed} \nCurr: ${currKeyPressed}`);
+            // console.log(`Last: ${lastKeyPressed} \nCurr: ${currKeyPressed}`);
         });
     });
 }
