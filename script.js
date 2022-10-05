@@ -61,6 +61,7 @@ function isOperator(a) {
 
 operatorBtn.forEach((btn) => {
     btn.addEventListener('click', (e) => {
+        e.target.focus();
         // if same operator is pressed, we ignore input
         if (lastKeyPressed == currKeyPressed) return;
 
