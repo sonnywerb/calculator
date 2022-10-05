@@ -1,91 +1,111 @@
-const display = document.querySelector('#display');
-const displayContainer = document.querySelector('#displayContainer');
-
 // Globals
-let currInput = 0;
-let inputArr = [];
+let output = 0;
 let x;
 let y;
-let operation = "";
-let output;
-// Initial calculator display
-displayUpdate(currInput);
+let z;
+let operator;
+let currKeyPressed;
+let lastKeyPressed;
 
-// button click events
-const numberKeys = document.querySelectorAll('.number');
-numberKeys.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        getNumber(e);
+const display = document.querySelector('#display');
+const displayContainer = document.querySelector('#displayContainer');
+const numberBtn = document.querySelectorAll('.number');
+const operatorBtn = document.querySelectorAll('.operator');
+const equalsBtn = document.querySelector('#equal');
+const buttons = document.querySelectorAll('button');
+
+function getLastKeyPressed() {
+    buttons.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            lastKeyPressed = currKeyPressed;
+            currKeyPressed = e.target.textContent;
+            console.log(`Last: ${lastKeyPressed} \nCurr: ${currKeyPressed}`);
+        });
     });
-});
-
-const operatorKeys = document.querySelectorAll('.operator');
-operatorKeys.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        console.log(`op: ${operation}`);
-        console.log(`X = ${x}`);
-        console.log(`Y = ${y}`);
-        if (operation !== "") {
-            evaluate();
-        }
-        getOperator(e);
-    });
-});
-
-const equalsKey = document.querySelector('#equal');
-equalsKey.addEventListener('click', () => {
-    if (operation !== "") {
-        evaluate();
-    }
-    return;
-
-    // console.log(`X = ${x}`);
-    // console.log(`Y = ${y}`);
-    // console.log(`op: ${operation}`);
-    // console.log(`output: ${output}`);
-});
-
-// functions
-function getNumber(e) {
-    inputArr.push(e.target.textContent);
-    currInput = toNumber(inputArr);
-    displayUpdate(currInput);
 }
+getLastKeyPressed();
 
-function toNumber(arr) {
-    return parseInt(arr.join(""));
-}
-
-function getOperator(e) {
-    operation = e.target.textContent;
-    x = currInput;
-    inputArr.splice(0, inputArr.length);
-}
-
-function evaluate() {
-    y = currInput;
-    output = operate(operation, x, y);
-    displayUpdate(output);
-    currInput = output;
-    operation = "";
-}
-
-function displayUpdate(output) {
+function updateDisplay() {
     display.textContent = output;
 }
 
-/*
-Calcuator steps
-1. enter first number
-2. select operator
-3. enter second number
-4. press equals
+// button click events
+numberBtn.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        appendNumber(e.target.textContent);
+        updateDisplay();
+    });
+});
 
-further functionalities to add
-- pressing an operator again would perform same functionality as =
-- make numbers shrink to fit on screen
+function appendNumber(n) {
+    if (output == 0) {
+        output = n;
+    } else {
+        output = output + n;
+    }
+}
 
-*/
+function isOperator(a) {
+    switch(a) {
+        case '+':
+            return true;
+        case '-':
+            return true;
+        case '*':
+            return true;
+        case '/':
+            return true;
+    }
+    return false;
+}
+
+operatorBtn.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        // if same operator is pressed, we ignore input
+        if (lastKeyPressed == currKeyPressed) return;
+
+        // Only one of the two following if's will be evaluated
+        // if the previous key and current key are both operators, we update
+        // the operator to the current operator
+        if (isOperator(lastKeyPressed) && isOperator(currKeyPressed)) {
+            operator = currKeyPressed;
+        // if the current key pressed is an operator and the last key press is not
+        // and there already exists an operator, then we will evaluate the 
+        // current expression
+        } else if (operator !== undefined && isOperator(currKeyPressed)) {
+            y = parseInt(output);
+            output = operate(operator, x, y);
+            updateDisplay();
+        }
+
+        // after clicking operator to evaluate, this will allow user to change the 
+        // current operator
+        if (isOperator(lastKeyPressed) && isOperator(currKeyPressed)) {
+            operator = currKeyPressed;
+        // otherwise, process the number
+        } else {
+            x = parseInt(output);
+            operator = currKeyPressed;
+            output = "";
+        }
+    });
+});
+
+equalsBtn.addEventListener('click', () => {
+    if (lastKeyPressed == currKeyPressed) return;
+    if (isOperator(lastKeyPressed)) return;
+
+    y = parseInt(output);
+    output = operate(operator, x, y);
+    updateDisplay();
+
+    // reset x and y
+    x = undefined;
+    y = undefined;
+    operator = undefined;
+
+    console.log(`Clicked Equals Log \nx: ${x} \ny: ${y} \noperator: ${operator} \noutput: ${output}`)
+});
 
 // arithmetic functions
 function add(a, b) {
