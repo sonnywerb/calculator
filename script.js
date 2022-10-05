@@ -12,8 +12,9 @@ const display = document.querySelector('#display');
 const displayContainer = document.querySelector('#displayContainer');
 const numberBtn = document.querySelectorAll('.number');
 const operatorBtn = document.querySelectorAll('.operator');
-const equalsBtn = document.querySelector('#equal');
-const decimalBtn = document.querySelector('#decimal');
+const equals = document.querySelector('#equal');
+const decimal = document.querySelector('#decimal');
+const clear = document.querySelector('#clear');
 const buttons = document.querySelectorAll('button');
 
 getLastKeyPressed();
@@ -59,10 +60,11 @@ operatorBtn.forEach((btn) => {
     });
 });
 
-equalsBtn.addEventListener('click', () => {
-    // if no values have been inputted yet or user has only 
-    // clicked operator then do nothing
-    if (x === undefined || isOperator(lastKeyPressed)) { 
+equals.addEventListener('click', () => {
+    // if theres an operator, but no second value;
+    if (isOperator(lastKeyPressed)) return;
+    // if no values have been inputted yet, do nothing
+    if (x === undefined) { 
         return;
     // perform last operation and return value
     } else if (lastKeyPressed == currKeyPressed) {
@@ -78,6 +80,17 @@ equalsBtn.addEventListener('click', () => {
     }
 });
 
+clear.addEventListener('click', () => {
+    output = 0;
+    x = undefined;
+    y = undefined;
+    z = undefined;
+    lastOperator = undefined;
+    operator = undefined;
+    currKeyPressed = undefined;
+    lastKeyPressed = undefined;
+    updateDisplay();
+})
 
 
 // helper functions
