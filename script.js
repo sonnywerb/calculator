@@ -1,3 +1,13 @@
+/*
+Things to work on
+- decimal
+- +/- symbol
+- % symbol
+- dynamic resizing of numbers
+- scientific notation
+- working with floats
+*/
+
 // Globals
 let output = 0;
 let x;
@@ -13,6 +23,8 @@ const numberBtn = document.querySelectorAll('.number');
 const operatorBtn = document.querySelectorAll('.operator');
 const equals = document.querySelector('#equal');
 const decimal = document.querySelector('#decimal');
+const plusMinus = document.querySelector('#plusMinus');
+const percent = document.querySelector('#percent');
 const clear = document.querySelector('#clear');
 const buttons = document.querySelectorAll('button');
 
@@ -41,7 +53,7 @@ operatorBtn.forEach((btn) => {
         // and there already exists an operator, then we will evaluate the 
         // current expression
         } else if (operator !== undefined && isOperator(currKeyPressed)) {
-            y = parseInt(output);
+            y = parseFloat(output);
             output = operate(operator, x, y);
             updateDisplay();
         }
@@ -52,7 +64,7 @@ operatorBtn.forEach((btn) => {
             operator = currKeyPressed;
         // otherwise, process the number
         } else {
-            x = parseInt(output);
+            x = parseFloat(output);
             operator = currKeyPressed;
             output = "";
         }
@@ -81,7 +93,7 @@ equals.addEventListener('click', () => {
         updateDisplay();
     // evaluate expression
     } else {
-        y = parseInt(output);
+        y = parseFloat(output);
         output = operate(operator, x, y);
         updateDisplay();
         lastOperator = operator;
@@ -98,6 +110,16 @@ clear.addEventListener('click', () => {
     operator = undefined;
     currKeyPressed = undefined;
     lastKeyPressed = undefined;
+    updateDisplay();
+});
+
+plusMinus.addEventListener('click', () => {
+    output *= -1;
+    updateDisplay();
+});
+
+percent.addEventListener('click', () => {
+    output = (output / 100);
     updateDisplay();
 })
 
