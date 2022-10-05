@@ -1,11 +1,7 @@
 /*
 Things to work on
-- decimal
-- +/- symbol
-- % symbol
 - dynamic resizing of numbers
 - scientific notation
-- working with floats
 */
 
 // Globals
@@ -28,7 +24,24 @@ const percent = document.querySelector('#percent');
 const clear = document.querySelector('#clear');
 const buttons = document.querySelectorAll('button');
 
-getLastKeyPressed();
+getLastKeyClicked();
+
+// keyboard support
+window.addEventListener("keydown", (e) => {
+    console.log(e.key);
+    // numbers 1-9 input
+    if (e.key === 0) document.getElementById('zero').click();
+    if (e.key > 0 || e.key <= 9) document.getElementById(`${e.key}`).click();
+    if (e.key === "Backspace") document.getElementById("clear").click();
+    if (e.key === '_') document.getElementById("plusMinus").click();
+    if (e.key === "%") document.getElementById("percent").click();
+    if (e.key === "/") document.getElementById("divide").click();
+    if (e.key === "*") document.getElementById("mulitply").click();
+    if (e.key === "-") document.getElementById("subtract").click();
+    if (e.key === "+") document.getElementById("add").click();
+    if (e.key === "Enter") document.getElementById("equal").click();
+    if (e.key === ".") document.getElementById("decimal").click();
+});
 
 // button click events
 numberBtn.forEach((btn) => {
@@ -36,17 +49,13 @@ numberBtn.forEach((btn) => {
         append(e.target.textContent);
         updateDisplay();
     });
-    // keyboard support
-    btn.addEventListener('keydown', (e) => {
-        append(e.target.key);
-        // console.log(e.target.key);
-        updateDisplay();
-    })
 });
+
 
 operatorBtn.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         e.target.focus();
+        
         // if same operator is pressed, we ignore input
         if (lastKeyPressed == currKeyPressed) return;
 
@@ -111,9 +120,6 @@ equals.addEventListener('click', () => {
     }
 });
 
-// last=digit current='=' &&  
-
-
 clear.addEventListener('click', () => {
     output = 0;
     x = undefined;
@@ -159,7 +165,7 @@ function append(n) {
     }
 }
 
-function getLastKeyPressed() {
+function getLastKeyClicked() {
     buttons.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             lastKeyPressed = currKeyPressed;
@@ -170,7 +176,7 @@ function getLastKeyPressed() {
 }
 
 function updateDisplay() {
-    display.textContent = output;
+    display.textContent = parseFloat(output);
 }
 
 function isOperator(a) {
