@@ -32,6 +32,7 @@ numberBtn.forEach((btn) => {
 operatorBtn.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         e.target.focus();
+        console.log(e.target.textContent);
         getOperator();
     });
 });
@@ -65,9 +66,7 @@ percent.addEventListener('click', () => {
 })
 
 // keyboard support
-window.addEventListener("keydown", (e) => {
-    keyboardInput(e);
-});
+window.addEventListener("keydown", (e) => keyboardInput(e));
 
 // helper functions
 function append(n) {
@@ -88,7 +87,6 @@ function getLastKeyClicked() {
         btn.addEventListener('click', (e) => {
             lastKeyPressed = currKeyPressed;
             currKeyPressed = e.target.textContent;
-            // console.log(`Last: ${lastKeyPressed} \nCurr: ${currKeyPressed}`);
         });
     });
 }
@@ -104,46 +102,14 @@ function isOperator(a) {
             return true;
         case '-':
             return true;
-        case '*':
+        // * in unicode
+        case '\u00d7':
             return true;
-        case '/':
+        // division in unicode
+        case '\u00f7':
             return true;
     }
     return false;
-}
-
-const evaluate = function() {
-    // if there's no second value inputted after operator, the = key
-    // assumes the second value is the same as the first
-    if (isOperator(lastKeyPressed)) {
-        y = x;
-        operator = lastKeyPressed;
-        output = operate(operator, x, y);
-        updateDisplay();
-        lastOperator = operator;
-        operator = undefined;
-    // if no values have been inputted yet, do nothing
-    } else if (x === undefined) { 
-        return;
-    // perform last operation and return value
-    } else if (lastKeyPressed === currKeyPressed) {
-        if (y === undefined) return;
-        output = operate(lastOperator, output, y);
-        updateDisplay();
-    // evaluate expression
-    } else {
-        if (operator === undefined) {
-            x = parseFloat(output);
-            output = operate(lastOperator, x, y);
-            updateDisplay();
-            return;
-        }
-        y = parseFloat(output);
-        lastOperator = operator;
-        output = operate(operator, x, y);
-        updateDisplay();
-        operator = undefined;
-    }
 }
 
 const getOperator = function() {
@@ -160,7 +126,7 @@ const getOperator = function() {
     // current expression
     } else if (operator !== undefined && isOperator(currKeyPressed)) {
         y = parseFloat(output);
-        output = operate(operator, x, y);
+        output = round(operate(operator, x, y));
         updateDisplay();
     }
 
@@ -173,6 +139,41 @@ const getOperator = function() {
         x = parseFloat(output);
         operator = currKeyPressed;
         output = "";
+    }
+}
+
+const evaluate = function() {
+    // if there's no second value inputted after operator, the = key
+    // assumes the second value is the same as the first
+    if (isOperator(lastKeyPressed)) {
+        y = x;
+        operator = lastKeyPressed;
+        output = round(operate(operator, x, y));
+        updateDisplay();
+        lastOperator = operator;
+        operator = undefined;
+    // if no values have been inputted yet, do nothing
+    } else if (x === undefined) { 
+        return;
+    // perform last operation and return value
+    } else if (lastKeyPressed === currKeyPressed) {
+        if (y === undefined) return;
+        output = round(operate(lastOperator, output, y));
+        updateDisplay();
+    // evaluate expression
+    } else {
+        if (operator === undefined) {
+            x = parseFloat(output);
+            output = round(operate(lastOperator, x, y));
+            updateDisplay();
+            return;
+        }
+        y = parseFloat(output);
+        lastOperator = operator;
+        output = round(operate(operator, x, y));
+        console.log(operator, x, y, output);
+        updateDisplay();
+        operator = undefined;
     }
 }
 
@@ -212,6 +213,10 @@ const resize = function() {
     }
 }
 
+const round = function(num) {
+    return Math.round((num + Number.EPSILON) * 10000000) / 10000000;
+}
+
 // arithmetic functions
 function add(a, b) {
     return a + b;
@@ -238,9 +243,9 @@ function operate(operator, x, y) {
             return add(x, y);
         case '-':
             return subtract(x, y);
-        case '*':
+        case '\u00d7':
             return multiply(x, y);
-        case '/':
+        case '\u00f7':
            return divide(x, y);
     }
 }
