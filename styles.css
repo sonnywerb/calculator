@@ -13,13 +13,12 @@ body {
 
 #container {
     margin: 7vh auto 3vh;
-    border: solid 1px;
     border-radius: 25px;
     height: 440px;
     width: 240px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 3px;
     background-color: #1C1C1C;
 }
 
@@ -34,22 +33,22 @@ body {
 
 #display {
     margin-top: 10px;
-    padding-top: 5px;
     padding-right: 10px;
-    padding-bottom: 5px;
+    padding-bottom: 3px;
     color:#fff;
     font-size: 46px;
 }
 
+.operator {
+    font-size: 28px;
+}
+
 button {
-    text-align: center;
     height: 50px;
     width: 50px;
-    border: solid 1px;
     border-radius: 50%;
     color: #fff;
     border-color: transparent;
-    font-size: larger;
 }
 
 button:hover {
@@ -62,13 +61,6 @@ button:hover {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin: 5px;
-    margin-top: 0px;
-    padding-bottom: 10px;
-}
-
-.operator {
-    font-size: 28px;
 }
 
 .operator:focus {
@@ -81,12 +73,17 @@ button:hover {
     border-radius: 23px;
 }
 
+#equal {
+    font-size: 20px; 
+}
+
 .orange {
     background-color: #FF9500;
 }
 
 .darkGray {
     background-color: #505050;
+    font-size: 20px;
 }
 
 .blackText {
@@ -95,6 +92,7 @@ button:hover {
 
 .gray {
     background-color: #D4D4D2;
+    font-size: 20px;
 }
 
 .footer {
