@@ -67,6 +67,10 @@ button:hover {
     padding-bottom: 10px;
 }
 
+.operator {
+    font-size: 30px;
+}
+
 .operator:focus {
     color: #FF9500;
     background-color: #fff;
