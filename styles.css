@@ -92,3 +92,26 @@ button:hover {
 .gray {
     background-color: #D4D4D2;
 }
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+}
+
+.fa-github {
+    color: black;
+    font-size: 24px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .fa-github:hover {
+    transform: rotate(360deg) scale(1.2);
+  }
